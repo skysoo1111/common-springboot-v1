@@ -1,0 +1,28 @@
+= gaia-contents-service
+:toc: left
+:toclevels: 2
+:source-highlighter: highlightjs
+
+== 1. 개요
+
+== 2. 헬스체크
+
+=== 2-1. 상태 조회
+===== Request
+include::{snippets}/test/http-request.adoc[]
+===== Response
+include::{snippets}/test/http-response.adoc[]
+include::{snippets}/test/response-fields.adoc[]
+include::{snippets}/test/response-body.adoc[]
+
+
+== 3. 회원
+
+=== 3-1. 회원 조회
+==== Request
+include::{snippets}/user/http-request.adoc[]
+===== Response
+include::{snippets}/user/http-response.adoc[]
+include::{snippets}/user/response-fields.adoc[]
+include::{snippets}/user/response-body.adoc[]
+

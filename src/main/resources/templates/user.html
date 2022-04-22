@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Global Exception Handling With Spring Boot</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .div2 {
+            margin-top: 3%;
+            padding: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1 style="text-align: center;" th:text="${title}">Default
+            title.</h1>
+        <h2 style="text-align: center;" th:text="${msg}">Default text.</h2>
+    </div>
+    <div>
+        <table style="width: 100%">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user: ${allUser}">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.uid}"></td>
+                <td th:text="${user.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="div2">
+        <a th:href="@{/}">Click here to visit DashBoard Page</a>
+    </div>
+</main>
+</body>
+</html>

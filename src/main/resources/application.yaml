@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: service-config
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:loc}
+    group:
+      "loc": "loc"
+      "dev": "dev"
+      "qa": "qa"
+      "real": "real"
+  config:
+    import: "optional:configserver:http://localhost:8888"
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    thymeleaf:
+      prefix:
+        classpath: templates/
+      check-template-location: true
+      sufix: .html
+      mode: HTML5
+      cache: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, info
+  endpoint:
+    refresh:
+      enabled: true
+
+# MyBatis
+# 자바 변수는 noticeYn, 컬럼은 notice_yn이다.
+# 구분되는 단어의 앞 글자만 대문자로 처리하는 카멜케이스 설정을 해서, 자동 매핑되도록 함.
+mybatis: # type을 쉽게 쓰기 위해서 dto 패키지를 type-aliaes에 설정
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.study.common.springbootv1.domain
+  mapper-locations: /mappers/*.xml

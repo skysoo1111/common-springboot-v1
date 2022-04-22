@@ -1,0 +1,141 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.asciidoctor.jvm.convert' version '3.3.2'
+    id 'com.epages.restdocs-api-spec' version '0.11.5'
+    id 'java'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+group = 'com.study.common'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+//def nexus_url = 'https://nexus3.test.com:8443/repository/maven-public'
+//def nexus_release_url = 'https://nexus3.ttest.com:8443/repository/maven-releases'
+def nexus_username = 'admin'
+def nexus_password = 'admin123'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    asciidoctorExtensions    // Spring REST Docs
+    querydsl.extendsFrom compileClasspath
+}
+
+repositories {
+    mavenCentral()
+//    maven {
+//        url nexus_url
+//        credentials {
+//            username nexus_username
+//            password nexus_password
+//        }
+//        allowInsecureProtocol = true
+//    }
+//    maven {
+//        url nexus_release_url
+//        credentials {
+//            username nexus_username
+//            password nexus_password
+//        }
+//        allowInsecureProtocol = true
+//    }
+}
+
+ext {
+    set('snippetsDir', file("build/generated-snippets")) // 생성된 스니펫의 저장 위치
+    set('springCloudVersion', "2021.0.1")
+    // version 관리
+    spring_version = "2.6.4"
+    swagger_version = "3.0.0"
+    mybatis_version = "2.2.2"
+    restdocs_api_version = "0.11.5"
+    queryDslVersion = "5.0.0"
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    //implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
+    // QueryDSL
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    //DB
+    implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatis_version"
+    runtimeOnly 'mysql:mysql-connector-java'
+    //Swagger
+    //implementation "io.springfox:springfox-boot-starter:$swagger_version"
+    implementation "io.springfox:springfox-swagger2:2.9.2"
+    implementation "io.springfox:springfox-swagger-ui:2.9.2"
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // Spring REST Docs
+    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    // Rest Docs + open api
+    testImplementation "com.epages:restdocs-api-spec-mockmvc:$restdocs_api_version"
+    testImplementation "com.epages:restdocs-api-spec-webtestclient:$restdocs_api_version"
+    testImplementation "com.epages:restdocs-api-spec-restassured:$restdocs_api_version"
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('test') {
+    ignoreFailures = true
+    outputs.dir snippetsDir // test task의 아웃풋 경로를 스니펫 저장 위치로 설정
+    useJUnitPlatform()
+}
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+openapi3 {
+    server = 'http://localhost:8080'
+    title = 'My API'
+    description = 'My API description'
+    version = '1.0.0'
+    format = 'yaml'
+
+    copy {
+        delete "src/main/resources/static/docs"
+        from "build/api-spec"
+        into 'src/main/resources/static/docs'
+    }
+}
+
+jar {
+    enabled = false
+}
