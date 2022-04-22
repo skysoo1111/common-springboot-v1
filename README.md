@@ -9,6 +9,14 @@ SpringBoot 2.6.4 + Gradle 7.4.1 환경에서의 기본 개발 환경 구성
 - [x] Exception Handler 구현
 - [ ] ResponseBodyAdvice 공통 Response 구현
 
+> 사전 준비 
+- Mysql DB
+- [Spring Cloud Config 서버](https://github.com/skysoo1111/spring-config-server) 
+
+> 기동 CMD
+> 
+> ./gradlew clean bootRun SPRING_PROFILES_ACTIVE=<PROFILE명>
+
 # 버전 정보
 |항목|버전|
 |---|---|
