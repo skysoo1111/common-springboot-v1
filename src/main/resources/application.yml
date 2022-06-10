@@ -1,0 +1,17 @@
+spring:
+  config:
+    import: classpath:application-etc.yml
+  application:
+    name: common-springboot-v1
+  profiles:
+    group:
+      local: common, local
+      dev: common, dev
+    default: local
+
+# ===============================
+# = SERVER
+# ===============================
+server:
+  port: 8080
+  shutdown: graceful

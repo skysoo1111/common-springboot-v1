@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.common.springbootv1.mapper.MemberMapper">
+    <select id="findAll" resultType="com.study.common.springbootv1.domain.Member">
+        SELECT * FROM USER
+    </select>
+
+    <select id="findByUid" resultType="com.study.common.springbootv1.domain.Member">
+        SELECT * FROM USER
+        WHERE UID = #{uid}
+    </select>
+
+    <insert id="save" parameterType="com.study.common.springbootv1.domain.Member">
+        INSERT INTO
+            USER
+        (
+         UID,
+         NAME,
+         PASSWORD
+        )
+        VALUES
+           (
+            #{uid},
+            #{name},
+            #{password}
+            )
+    </insert>
+
+</mapper>

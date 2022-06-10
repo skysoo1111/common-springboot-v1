@@ -1,0 +1,8 @@
+# ===============================
+# = Spring docs
+# ===============================
+spring:
+  config:
+    activate:
+      on-profile: start-docs
+

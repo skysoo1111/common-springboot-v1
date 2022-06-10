@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- 변수 지정 -->
+    <property name="LOG_PATH" value="./logs"/>
+    <property name="LOG_PATH_NAME" value="${LOG_PATH}/request.log"/>
+
+    <!-- FILE Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH_NAME}</file>
+        <!-- 일자별로 로그파일 적용하기 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>request.log.%d{yyyyMMdd}</fileNamePattern>
+            <!--            <fileNamePattern>${LOG_PATH_NAME}.%d{yyyyMMdd}</fileNamePattern>-->
+            <maxHistory>60</maxHistory> <!-- 일자별 백업파일의 보관기간 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%highlight(%-5level) %X{X-HIT-TRANSACTION-ID} %d{yyyy-MM-dd HH:mm:ss} [%-5p] [%F]%M\(%L\) : %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%highlight(%-5level) %X{X-HIT-TRANSACTION-ID} %d{yyyy-MM-dd HH:mm:ss} [%-5p] [%F]%M\(%L\) : %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+
+    <springProfile name="local">
+
+        <logger name="org.springframework.web.filter" level="DEBUG" charset="UTF-8" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+
+        <logger name="tving.gaia" level="DEBUG" charset="UTF-8" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <logger name="com.tving" level="DEBUG" charset="UTF-8" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <logger name="com.zaxxer.hikari" level="DEBUG" charset="UTF-8" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <logger name="org.hibernate.validator.internal" level="INFO" charset="UTF-8" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <logger name="org.springframework" level="INFO" charset="UTF-8" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <root level="DEBUG">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev">
+
+        <logger name="org.springframework.web.filter" level="DEBUG" charset="UTF-8" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+
+        <logger name="tving.gaia" level="DEBUG" charset="UTF-8" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+
+        <root level="ERROR">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <!--    <logger name="org.hibernate.SQL" level="ERROR" charset="UTF-8"/>-->
+</configuration>

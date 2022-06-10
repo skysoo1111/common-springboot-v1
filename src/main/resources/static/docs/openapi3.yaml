@@ -1,0 +1,164 @@
+openapi: 3.0.1
+info:
+  title: My API
+  description: My API description
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+tags: []
+paths:
+  /healthcheck/_check:
+    get:
+      tags:
+      - healthcheck
+      operationId: health-check-controller/health-check-test
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/healthcheck-_check945083525'
+              examples:
+                health-check-controller/health-check-test:
+                  value: "{\"code\":\"0000\",\"message\":\"Success\",\"data\":\"_check\"\
+                    }"
+  /v1/signin/:
+    post:
+      tags:
+      - v1
+      operationId: member-controller-test/signin
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/v1-signin--1521342545'
+            examples:
+              member-controller-test/signin:
+                value: "{\"id\":null,\"uid\":\"skysoo1111@test.com\",\"name\":\"테스\
+                  트\",\"password\":\"1234\",\"number\":null}"
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1-signin--2040838430'
+              examples:
+                member-controller-test/signin:
+                  value: "{\"code\":\"0000\",\"message\":\"Success\",\"data\":{\"\
+                    id\":1,\"uid\":\"skysoo1111@test.com\",\"name\":\"테스트\",\"password\"\
+                    :\"1234\",\"number\":null}}"
+  /v1/signout/{email}:
+    delete:
+      tags:
+      - v1
+      operationId: member-controller-test/signout
+      parameters:
+      - name: email
+        in: path
+        description: 이메일
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1-signout-email350347658'
+              examples:
+                member-controller-test/signout:
+                  value: "{\"code\":\"0000\",\"message\":\"Success\"}"
+  /v1/signup/:
+    post:
+      tags:
+      - v1
+      operationId: member-controller-test/signup
+      requestBody:
+        content:
+          application/json;charset=UTF-8:
+            schema:
+              $ref: '#/components/schemas/v1-signin--1521342545'
+            examples:
+              member-controller-test/signup:
+                value: "{\"id\":null,\"uid\":\"skysoo1111@test.com\",\"name\":\"테스\
+                  트\",\"password\":\"1234\",\"number\":null}"
+      responses:
+        "200":
+          description: "200"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1-signin--2040838430'
+              examples:
+                member-controller-test/signup:
+                  value: "{\"code\":\"0000\",\"message\":\"Success\",\"data\":{\"\
+                    id\":4,\"uid\":\"skysoo1111@test.com\",\"name\":\"테스트\",\"number\"\
+                    :null,\"password\":\"1234\"}}"
+components:
+  schemas:
+    healthcheck-_check945083525:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 결과 코드
+        data:
+          type: string
+          description: 결과 값
+        message:
+          type: string
+          description: 결과 상태
+    v1-signin--2040838430:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 결과 코드
+        data:
+          type: object
+          properties:
+            number:
+              type: string
+              description: 전화번호
+            uid:
+              type: string
+              description: 이메일
+            password:
+              type: string
+              description: 비밀번호
+            name:
+              type: string
+              description: 이름
+            id:
+              type: number
+              description: seq no
+        message:
+          type: string
+          description: 결과 상태
+    v1-signout-email350347658:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 결과 코드
+        message:
+          type: string
+          description: 결과 상태
+    v1-signin--1521342545:
+      type: object
+      properties:
+        number:
+          type: string
+          description: 전화번호
+        uid:
+          type: string
+          description: 이메일
+        password:
+          type: string
+          description: 비밀번호
+        name:
+          type: string
+          description: 이름

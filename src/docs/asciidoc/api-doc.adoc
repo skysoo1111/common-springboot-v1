@@ -5,24 +5,31 @@
 
 == 1. 개요
 
-== 2. 헬스체크
-
-=== 2-1. 상태 조회
+== 2. Health Check
+=== 2-1. Health Check
 ===== Request
-include::{snippets}/test/http-request.adoc[]
+include::{snippets}/health-check-controller/health-check-test/http-request.adoc[]
 ===== Response
-include::{snippets}/test/http-response.adoc[]
-include::{snippets}/test/response-fields.adoc[]
-include::{snippets}/test/response-body.adoc[]
-
+include::{snippets}/health-check-controller/health-check-test/http-response.adoc[]
 
 == 3. 회원
-
-=== 3-1. 회원 조회
+=== 3-1. 회원 가입
 ==== Request
-include::{snippets}/user/http-request.adoc[]
+include::{snippets}/member-controller-test/signup/http-request.adoc[]
 ===== Response
-include::{snippets}/user/http-response.adoc[]
-include::{snippets}/user/response-fields.adoc[]
-include::{snippets}/user/response-body.adoc[]
+include::{snippets}/member-controller-test/signup/http-response.adoc[]
+include::{snippets}/member-controller-test/signup/response-fields.adoc[]
 
+=== 3-1. 로그인
+==== Request
+include::{snippets}/member-controller-test/signin/http-request.adoc[]
+===== Response
+include::{snippets}/member-controller-test/signin/http-response.adoc[]
+include::{snippets}/member-controller-test/signin/response-fields.adoc[]
+
+=== 3-1. 회원 탈퇴
+==== Request
+include::{snippets}/member-controller-test/signout/http-request.adoc[]
+===== Response
+include::{snippets}/member-controller-test/signout/http-response.adoc[]
+include::{snippets}/member-controller-test/signout/response-fields.adoc[]

@@ -1,7 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.6.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.asciidoctor.jvm.convert' version '3.3.2'
     id 'com.epages.restdocs-api-spec' version '0.11.5'
     id 'java'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
@@ -46,8 +45,11 @@ repositories {
 //    }
 }
 
+repositories {
+    mavenCentral()
+}
+
 ext {
-    set('snippetsDir', file("build/generated-snippets")) // 생성된 스니펫의 저장 위치
     set('springCloudVersion', "2021.0.1")
     // version 관리
     spring_version = "2.6.4"
@@ -58,44 +60,41 @@ ext {
 }
 
 dependencies {
+    // Custom jar 파일 호출
+    implementation files('libs/web-0.0.1-SNAPSHOT.jar')
+
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    //implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
-
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     // QueryDSL
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
-
     //DB
     implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatis_version"
     runtimeOnly 'mysql:mysql-connector-java'
     //Swagger
-    //implementation "io.springfox:springfox-boot-starter:$swagger_version"
-    implementation "io.springfox:springfox-swagger2:2.9.2"
-    implementation "io.springfox:springfox-swagger-ui:2.9.2"
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
+    //etc
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'com.google.collections:google-collections:1.0'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // Spring REST Docs
-    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     // Rest Docs + open api
     testImplementation "com.epages:restdocs-api-spec-mockmvc:$restdocs_api_version"
     testImplementation "com.epages:restdocs-api-spec-webtestclient:$restdocs_api_version"
     testImplementation "com.epages:restdocs-api-spec-restassured:$restdocs_api_version"
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation 'org.springframework.security:spring-security-test'
 }
-
 
 dependencyManagement {
     imports {
@@ -103,9 +102,14 @@ dependencyManagement {
     }
 }
 
+tasks {
+    processResources {
+        duplicatesStrategy = org.gradle.api.file.DuplicatesStrategy.INCLUDE
+    }
+}
+
 tasks.named('test') {
     ignoreFailures = true
-    outputs.dir snippetsDir // test task의 아웃풋 경로를 스니펫 저장 위치로 설정
     useJUnitPlatform()
 }
 
@@ -130,7 +134,6 @@ openapi3 {
     format = 'yaml'
 
     copy {
-        delete "src/main/resources/static/docs"
         from "build/api-spec"
         into 'src/main/resources/static/docs'
     }
